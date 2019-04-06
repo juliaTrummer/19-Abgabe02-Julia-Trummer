@@ -3,6 +3,8 @@
     <property name="src" location="SimpleAutomaticBuildProject\src\main\java\at\fhj\iit" />
     <property name="jar.dir" location="SimpleAutomaticBuildProject\target" />
     <property name="classes.dir" location="SimpleAutomaticBuildProject\target\classes" />
+    <property name="main-class" location="SimpleAutomaticBuildProject\target\classes\at\fhj\iit" />
+    <property name="ant.project.name" location="build-ant" />
     <!-- first target which creates directories for later usage -->
     <!-- read more about: https://ant.apache.org/manual/targets.html -->
     <target name="init">
@@ -29,9 +31,12 @@
             </manifest>
         </jar>
     </target>
-    <target name="run">
-        <java jar="SimpleAutomaticBuildProject\target\buildaut.jar" fork="true"/>
+     <target name="install" depends="jar">
+         <mkdir dir="build-ant/jar"/>
+
+     </target>
+    <target name="run" depends="jar">
+        <echo message="Attempting to run!" />
+        <java jar="SimpleAutomaticBuildProject\target\SimpleAutomaticBuildProject.jar" output="output.txt" fork="true" />
     </target>
-
-
 </project>
