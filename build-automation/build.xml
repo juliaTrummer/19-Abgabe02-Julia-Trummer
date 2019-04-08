@@ -7,6 +7,7 @@
     <property name="main-class" value="at.fhj.iit.Main" />
     <property name="antname" location="build-ant" />
     <property name="dist" location="dist" />
+
     <!-- first target which creates directories for later usage -->
     <!-- read more about: https://ant.apache.org/manual/targets.html -->
     <target name="init">
@@ -33,16 +34,25 @@
             </manifest>
         </jar>
     </target>
+
+    <target name="test" depends="compile">
+        <echo message="We don't have any tests!" />
+    </target>
+
      <target name="install" depends="jar">
          <copy todir="dist">
              <fileset dir="build-ant\jar"/>
          </copy>
-
      </target>
+
     <target name="run" depends="install">
         <echo message="Attempting to run!" />
         <java jar="build-ant\jar\SimpleAutomaticBuildProject.jar" fork="true">
             <arg value="${arg0}"/>
         </java>
+    </target>
+
+    <target name="main" depends="clean,run">
+        <echo message="Cleaning... and running" />
     </target>
 </project>
