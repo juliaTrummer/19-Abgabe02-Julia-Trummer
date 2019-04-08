@@ -1,31 +1,33 @@
 <project name="SimpleAutomaticBuildProject">
     <!-- work similar to variables-->
     <property name="src" location="SimpleAutomaticBuildProject\src\main\java\at\fhj\iit" />
-    <property name="jar.dir" location="SimpleAutomaticBuildProject\target" />
+    <property name="jar.dir" location="jar" />
     <property name="classes.dir" location="SimpleAutomaticBuildProject\target\classes" />
-    <property name="main-class" location="SimpleAutomaticBuildProject\target\classes\at\fhj\iit" />
-    <property name="ant.project.name" location="build-ant" />
+    <!--package-->
+    <property name="main-class" value="at.fhj.iit.Main" />
+    <property name="antname" location="build-ant" />
+    <property name="dist" location="dist" />
     <!-- first target which creates directories for later usage -->
     <!-- read more about: https://ant.apache.org/manual/targets.html -->
     <target name="init">
-        <mkdir dir="build-ant"/>
-        <mkdir dir="dist"/>
+        <mkdir dir="${antname}"/>
+        <mkdir dir="${dist}"/>
     </target>
 
     <!-- removes same directories which created by init target -->
     <target name="clean">
-        <delete dir="build-ant"/>
-        <delete dir="dist"/>
+        <delete dir="${antname}"/>
+        <delete dir="${dist}"/>
     </target>
 
     <!-- compiles defined java src files and store them into destination directory -->
     <target name="compile" depends="init">
-        <javac srcdir="${src}" destdir="build-ant" includeantruntime="false"/>
+        <javac srcdir="${src}" destdir="${antname}" includeantruntime="false"/>
     </target>
 
     <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+        <mkdir dir="build-ant\jar"/>
+        <jar destfile="build-ant\jar\${ant.project.name}.jar" basedir="${antname}">
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
@@ -33,13 +35,13 @@
     </target>
      <target name="install" depends="jar">
          <copy todir="dist">
-             <fileset file="${jar.dir}\SimpleAutomaticBuildProject.jar"/>
+             <fileset dir="build-ant\jar"/>
          </copy>
 
      </target>
-    <target name="run" depends="jar">
+    <target name="run" depends="install">
         <echo message="Attempting to run!" />
-        <java jar="${ant.project.name}/dist/SimpleAutomaticBuildProject.jar" fork="true">
+        <java jar="build-ant\jar\SimpleAutomaticBuildProject.jar" fork="true">
             <arg value="${arg0}"/>
         </java>
     </target>
